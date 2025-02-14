@@ -3,52 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- SurfaceView for rendering the game -->
+    <!-- GameView for rendering the game -->
     <com.aghakhani.snakegame.GameView
         android:id="@+id/gameView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-
-    <!-- Arrow buttons -->
-    <Button
-        android:id="@+id/btnUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="↑"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"
+        android:layout_height="0dp"
+        android:layout_above="@+id/controlPanel"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp" />
+        android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/btnDown"
-        android:layout_width="wrap_content"
+    <!-- Control Panel (Arrow Buttons) -->
+    <LinearLayout
+        android:id="@+id/controlPanel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="↓"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="#333333">
 
-    <Button
-        android:id="@+id/btnLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="←"
-        android:textSize="24sp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="20dp" />
+        <!-- Vertical Layout for Up and Down Buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
 
-    <Button
-        android:id="@+id/btnRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="→"
-        android:textSize="24sp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="20dp" />
+            <!-- Up Button -->
+            <Button
+                android:id="@+id/btnUp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="↑"
+                android:textSize="24sp"
+                android:backgroundTint="#FF5722" />
+
+            <!-- Down Button -->
+            <Button
+                android:id="@+id/btnDown"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="↓"
+                android:textSize="24sp"
+                android:backgroundTint="#FF5722" />
+        </LinearLayout>
+
+        <!-- Horizontal Layout for Left and Right Buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Left Button -->
+            <Button
+                android:id="@+id/btnLeft"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="←"
+                android:textSize="24sp"
+                android:backgroundTint="#FF5722" />
+
+            <!-- Right Button -->
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="→"
+                android:textSize="24sp"
+                android:backgroundTint="#FF5722" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>
