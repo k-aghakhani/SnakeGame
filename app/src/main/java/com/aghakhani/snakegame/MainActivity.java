@@ -1,15 +1,6 @@
 package com.aghakhani.snakegame;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-
-import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,10 +10,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        // Initialize GameView and set it as the content view
-        gameView = new GameView(this);
-        setContentView(gameView);
+        // Initialize GameView
+        gameView = findViewById(R.id.gameView);
+
+        // Set up arrow buttons
+        findViewById(R.id.btnUp).setOnClickListener(v -> gameView.setDirection(0, -1)); // Up
+        findViewById(R.id.btnDown).setOnClickListener(v -> gameView.setDirection(0, 1)); // Down
+        findViewById(R.id.btnLeft).setOnClickListener(v -> gameView.setDirection(-1, 0)); // Left
+        findViewById(R.id.btnRight).setOnClickListener(v -> gameView.setDirection(1, 0)); // Right
     }
 
     @Override

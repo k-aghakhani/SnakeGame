@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.view.MotionEvent;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -31,8 +31,14 @@ public class GameView extends SurfaceView implements Runnable {
     private long lastUpdateTime; // Time of the last update
     private int score = 0; // Player's score
 
+    // Constructor with Context only
     public GameView(Context context) {
-        super(context);
+        this(context, null); // Call the second constructor
+    }
+
+    // Constructor with Context and AttributeSet
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         // Initialize variables
         holder = getHolder();
@@ -174,27 +180,13 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            float x = event.getX();
-            float y = event.getY();
-
-            // Change direction based on touch location
-            if (x < screenX / 2 && directionX == 0) { // Left side of the screen
-                directionX = -1;
-                directionY = 0;
-            } else if (x >= screenX / 2 && directionX == 0) { // Right side of the screen
-                directionX = 1;
-                directionY = 0;
-            } else if (y < screenY / 2 && directionY == 0) { // Top half of the screen
-                directionX = 0;
-                directionY = -1;
-            } else if (y >= screenY / 2 && directionY == 0) { // Bottom half of the screen
-                directionX = 0;
-                directionY = 1;
-            }
+    public void setDirection(int dx, int dy) {
+        // Prevent reversing direction (e.g., moving right and then immediately left)
+        if ((dx == 1 && directionX == -1) || (dx == -1 && directionX == 1) ||
+                (dy == 1 && directionY == -1) || (dy == -1 && directionY == 1)) {
+            return;
         }
-        return true;
+        directionX = dx;
+        directionY = dy;
     }
 }
