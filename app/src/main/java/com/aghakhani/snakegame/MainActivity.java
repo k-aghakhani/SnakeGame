@@ -1,32 +1,41 @@
 package com.aghakhani.snakegame;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private GameView gameView;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize GameView
         gameView = findViewById(R.id.gameView);
+        View controlPanel = findViewById(R.id.controlPanel);
 
-        // Set up arrow buttons
-        findViewById(R.id.btnUp).setOnClickListener(v -> gameView.setDirection(0, -1)); // Up
-        findViewById(R.id.btnDown).setOnClickListener(v -> gameView.setDirection(0, 1)); // Down
-        findViewById(R.id.btnLeft).setOnClickListener(v -> gameView.setDirection(-1, 0)); // Left
-        findViewById(R.id.btnRight).setOnClickListener(v -> gameView.setDirection(1, 0)); // Right
+        // دریافت ارتفاع کنترل پنل بعد از تنظیم UI
+        controlPanel.post(() -> {
+            if (gameView != null) {
+                gameView.setControlPanelHeight(controlPanel.getHeight());
+            }
+        });
+
+        findViewById(R.id.btnUp).setOnClickListener(v -> gameView.setDirection(0, -1));
+        findViewById(R.id.btnDown).setOnClickListener(v -> gameView.setDirection(0, 1));
+        findViewById(R.id.btnLeft).setOnClickListener(v -> gameView.setDirection(-1, 0));
+        findViewById(R.id.btnRight).setOnClickListener(v -> gameView.setDirection(1, 0));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (gameView != null) {
-            gameView.resume(); // Start the game loop
+            gameView.resume();
         }
     }
 
@@ -34,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (gameView != null) {
-            gameView.pause(); // Stop the game loop
+            gameView.pause();
         }
     }
 }
