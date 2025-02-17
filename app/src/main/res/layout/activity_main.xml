@@ -1,89 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#000000">
 
-    <!-- GameView for rendering the game -->
     <com.aghakhani.snakegame.GameView
         android:id="@+id/gameView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/controlPanel"
-        android:layout_alignParentTop="true" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <!-- Control Panel (Arrow Buttons) -->
     <LinearLayout
         android:id="@+id/controlPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:padding="10dp"
-        android:background="@null"
-        android:elevation="0dp">
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <!-- Vertical Layout for Up and Down Buttons -->
+        <ImageButton
+            android:id="@+id/btnUp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button_background"
+            android:src="@drawable/ic_arrow_up"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/white"
+            android:contentDescription="Up" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:gravity="center">
 
-            <!-- Up Button -->
-            <Button
-                android:id="@+id/btnUp"
+            <ImageButton
+                android:id="@+id/btnLeft"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:text="↑"
-                android:textSize="24sp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/button_background" />
+                android:background="@drawable/button_background"
+                android:src="@drawable/ic_arrow_left"
+                android:scaleType="fitCenter"
+                android:tint="@android:color/white"
+                android:contentDescription="Left" />
 
-            <!-- Horizontal Layout for Left and Right Buttons -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+            <View
+                android:layout_width="20dp"
+                android:layout_height="60dp" />
 
-                <!-- Left Button -->
-                <Button
-                    android:id="@+id/btnLeft"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:text="←"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/button_background" />
-
-                <!-- Empty Space -->
-                <View
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@android:color/transparent" />
-
-                <!-- Right Button -->
-                <Button
-                    android:id="@+id/btnRight"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:text="→"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/button_background" />
-            </LinearLayout>
-
-            <!-- Down Button -->
-            <Button
-                android:id="@+id/btnDown"
+            <ImageButton
+                android:id="@+id/btnRight"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:text="↓"
-                android:textSize="24sp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/button_background" />
+                android:background="@drawable/button_background"
+                android:src="@drawable/ic_arrow_right"
+                android:scaleType="fitCenter"
+                android:tint="@android:color/white"
+                android:contentDescription="Right" />
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnDown"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button_background"
+            android:src="@drawable/ic_arrow_down"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/white"
+            android:contentDescription="Down" />
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
