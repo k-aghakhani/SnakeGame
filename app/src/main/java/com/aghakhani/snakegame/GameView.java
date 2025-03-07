@@ -26,6 +26,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int[] food;
     private int directionX = 1, directionY = 0;
     private boolean isControlPanelHeightSet = false;
+    private int score = 0; // Score variable to track player's points
 
     private Random random = new Random();
     private Handler handler = new Handler();
@@ -33,18 +34,23 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        // Initialize SurfaceHolder and Paint
         holder = getHolder();
         paint = new Paint();
 
+        // Get screen dimensions
         screenX = getResources().getDisplayMetrics().widthPixels;
         screenY = getResources().getDisplayMetrics().heightPixels;
 
+        // Calculate number of blocks based on screen size
         numBlocksX = screenX / blockSize;
         numBlocksY = screenY / blockSize;
 
+        // Start a new game
         resetGame();
     }
 
+    // Set the playable area height by subtracting control panel height
     public void setControlPanelHeight(int controlPanelHeight) {
         if (!isControlPanelHeightSet) {
             numBlocksY = (screenY - controlPanelHeight) / blockSize;
@@ -52,12 +58,15 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    // Reset the game state
     private void resetGame() {
         snake = new ArrayList<>();
-        snake.add(new int[]{numBlocksX / 2, numBlocksY / 2});
+        snake.add(new int[]{numBlocksX / 2, numBlocksY / 2}); // Start snake in the middle
         spawnFood();
+        score = 0; // Reset score when game restarts
     }
 
+    // Spawn food at a random location not occupied by the snake
     private void spawnFood() {
         int foodX, foodY;
         do {
@@ -68,6 +77,7 @@ public class GameView extends SurfaceView implements Runnable {
         food = new int[]{foodX, foodY};
     }
 
+    // Check if the snake occupies a given position
     private boolean isSnakeAt(int x, int y) {
         for (int[] part : snake) {
             if (part[0] == x && part[1] == y) return true;
@@ -78,59 +88,71 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (isPlaying) {
-            update();
-            draw();
-            control();
+            update(); // Update game state
+            draw();   // Draw the game
+            control(); // Control game speed
         }
     }
 
+    // Update snake position and game logic
     private void update() {
         int newHeadX = snake.get(0)[0] + directionX;
         int newHeadY = snake.get(0)[1] + directionY;
 
-        // چک کردن برخورد با دیوار یا خودش
+        // Check for collision with walls or self
         if (newHeadX < 0 || newHeadX >= numBlocksX || newHeadY < 0 || newHeadY >= numBlocksY || isSnakeAt(newHeadX, newHeadY)) {
             resetGame();
             return;
         }
 
-        // اضافه کردن سر جدید مار
+        // Add new head to snake
         snake.add(0, new int[]{newHeadX, newHeadY});
 
-        // چک کردن خوردن غذا
+        // Check if snake eats the food
         if (newHeadX == food[0] && newHeadY == food[1]) {
             spawnFood();
+            score += 10; // Increase score by 10 when food is eaten
         } else {
-            // حذف دم مار
+            // Remove tail if no food is eaten
             snake.remove(snake.size() - 1);
         }
     }
 
+    // Draw the game elements on the canvas
     private void draw() {
         if (holder.getSurface().isValid()) {
             Canvas canvas = holder.lockCanvas();
-            canvas.drawColor(Color.BLACK);
+            canvas.drawColor(Color.BLACK); // Clear screen with black background
 
+            // Draw the snake
             paint.setColor(Color.GREEN);
             for (int[] part : snake) {
                 canvas.drawRect(part[0] * blockSize, part[1] * blockSize, (part[0] + 1) * blockSize, (part[1] + 1) * blockSize, paint);
             }
 
+            // Draw the food
             paint.setColor(Color.RED);
             canvas.drawCircle(food[0] * blockSize + blockSize / 2, food[1] * blockSize + blockSize / 2, blockSize / 2, paint);
+
+            // Draw the score
+            paint.setColor(Color.WHITE);
+            paint.setTextSize(50);
+            canvas.drawText("Score: " + score, 20, 50, paint);
 
             holder.unlockCanvasAndPost(canvas);
         }
     }
 
+    // Control game speed
     private void control() {
         try {
-            Thread.sleep(150);
+            Thread.sleep(150); // Pause to control frame rate
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    // Set snake direction based on user input
     public void setDirection(int dx, int dy) {
         if ((dx != 0 && directionX == 0) || (dy != 0 && directionY == 0)) {
             directionX = dx;
@@ -138,12 +160,14 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    // Resume the game
     public void resume() {
         isPlaying = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
+    // Pause the game
     public void pause() {
         try {
             isPlaying = false;
