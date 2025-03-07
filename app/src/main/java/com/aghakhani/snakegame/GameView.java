@@ -53,7 +53,7 @@ public class GameView extends SurfaceView implements Runnable {
     // Set the playable area height by subtracting control panel height
     public void setControlPanelHeight(int controlPanelHeight) {
         if (!isControlPanelHeightSet) {
-            numBlocksY = (screenY - controlPanelHeight) / blockSize;
+            numBlocksY = (screenY - controlPanelHeight) / blockSize; // Adjust playable area
             isControlPanelHeightSet = true;
         }
     }
@@ -66,12 +66,13 @@ public class GameView extends SurfaceView implements Runnable {
         score = 0; // Reset score when game restarts
     }
 
-    // Spawn food at a random location not occupied by the snake
+    // Spawn food at a random location not occupied by the snake and above control panel
     private void spawnFood() {
         int foodX, foodY;
         do {
             foodX = random.nextInt(numBlocksX);
-            foodY = random.nextInt(numBlocksY);
+            // Ensure food spawns only in the visible area (above control panel)
+            foodY = random.nextInt(numBlocksY); // numBlocksY is already adjusted for control panel
         } while (isSnakeAt(foodX, foodY));
 
         food = new int[]{foodX, foodY};
