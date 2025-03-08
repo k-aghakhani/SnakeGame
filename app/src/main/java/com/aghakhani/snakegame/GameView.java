@@ -144,10 +144,12 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    // Control game speed
+    // Control game speed based on snake length
     private void control() {
         try {
-            Thread.sleep(150); // Pause to control frame rate
+            // Base speed is 150ms, decreases by 5ms for each snake segment, minimum 50ms
+            int speed = 150 - (snake.size() * 5);
+            Thread.sleep(Math.max(speed, 50)); // Ensure speed doesn't go below 50ms
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
