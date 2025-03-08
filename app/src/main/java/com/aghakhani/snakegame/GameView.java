@@ -24,6 +24,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private ArrayList<int[]> snake;
     private int[] food;
+    private ArrayList<int[]> obstacles; // List to store obstacle positions
     private int directionX = 1, directionY = 0;
     private boolean isControlPanelHeightSet = false;
     private int score = 0; // Score variable to track player's points
@@ -63,25 +64,47 @@ public class GameView extends SurfaceView implements Runnable {
         snake = new ArrayList<>();
         snake.add(new int[]{numBlocksX / 2, numBlocksY / 2}); // Start snake in the middle
         spawnFood();
+        spawnObstacles(); // Spawn obstacles when resetting the game
         score = 0; // Reset score when game restarts
     }
 
-    // Spawn food at a random location not occupied by the snake and above control panel
+    // Spawn food at a random location not occupied by snake or obstacles
     private void spawnFood() {
         int foodX, foodY;
         do {
             foodX = random.nextInt(numBlocksX);
-            // Ensure food spawns only in the visible area (above control panel)
-            foodY = random.nextInt(numBlocksY); // numBlocksY is already adjusted for control panel
-        } while (isSnakeAt(foodX, foodY));
-
+            foodY = random.nextInt(numBlocksY); // numBlocksY is adjusted for control panel
+        } while (isSnakeAt(foodX, foodY) || isObstacleAt(foodX, foodY));
         food = new int[]{foodX, foodY};
+    }
+
+    // Spawn a fixed number of obstacles randomly
+    private void spawnObstacles() {
+        obstacles = new ArrayList<>();
+        int obstacleCount = 5; // Number of obstacles, adjustable
+        for (int i = 0; i < obstacleCount; i++) {
+            int obsX, obsY;
+            do {
+                obsX = random.nextInt(numBlocksX);
+                obsY = random.nextInt(numBlocksY);
+            } while (isSnakeAt(obsX, obsY) || (food != null && obsX == food[0] && obsY == food[1]));
+            obstacles.add(new int[]{obsX, obsY});
+        }
     }
 
     // Check if the snake occupies a given position
     private boolean isSnakeAt(int x, int y) {
         for (int[] part : snake) {
             if (part[0] == x && part[1] == y) return true;
+        }
+        return false;
+    }
+
+    // Check if an obstacle occupies a given position
+    private boolean isObstacleAt(int x, int y) {
+        if (obstacles == null) return false;
+        for (int[] obs : obstacles) {
+            if (obs[0] == x && obs[1] == y) return true;
         }
         return false;
     }
@@ -100,8 +123,9 @@ public class GameView extends SurfaceView implements Runnable {
         int newHeadX = snake.get(0)[0] + directionX;
         int newHeadY = snake.get(0)[1] + directionY;
 
-        // Check for collision with walls or self
-        if (newHeadX < 0 || newHeadX >= numBlocksX || newHeadY < 0 || newHeadY >= numBlocksY || isSnakeAt(newHeadX, newHeadY)) {
+        // Check for collision with walls, self, or obstacles
+        if (newHeadX < 0 || newHeadX >= numBlocksX || newHeadY < 0 || newHeadY >= numBlocksY ||
+                isSnakeAt(newHeadX, newHeadY) || isObstacleAt(newHeadX, newHeadY)) {
             resetGame();
             return;
         }
@@ -134,6 +158,12 @@ public class GameView extends SurfaceView implements Runnable {
             // Draw the food
             paint.setColor(Color.RED);
             canvas.drawCircle(food[0] * blockSize + blockSize / 2, food[1] * blockSize + blockSize / 2, blockSize / 2, paint);
+
+            // Draw the obstacles
+            paint.setColor(Color.GRAY);
+            for (int[] obs : obstacles) {
+                canvas.drawRect(obs[0] * blockSize, obs[1] * blockSize, (obs[0] + 1) * blockSize, (obs[1] + 1) * blockSize, paint);
+            }
 
             // Draw the score
             paint.setColor(Color.WHITE);
