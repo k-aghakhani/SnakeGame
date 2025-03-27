@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -118,8 +119,24 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    // Update snake position and game logic
+    // Update snake position, obstacles, and game logic
     private void update() {
+        // Move obstacles randomly with 20% chance
+        for (int[] obs : obstacles) {
+            if (random.nextInt(10) < 2) { // 20% chance to move
+                int newObsX = obs[0] + (random.nextInt(3) - 1); // Move -1, 0, or 1 horizontally
+                int newObsY = obs[1] + (random.nextInt(3) - 1); // Move -1, 0, or 1 vertically
+
+                // Ensure obstacle stays within bounds and doesn't overlap with food or snake
+                if (newObsX >= 0 && newObsX < numBlocksX && newObsY >= 0 && newObsY < numBlocksY &&
+                        !isSnakeAt(newObsX, newObsY) && (food[0] != newObsX || food[1] != newObsY)) {
+                    obs[0] = newObsX;
+                    obs[1] = newObsY;
+                }
+            }
+        }
+
+        // Update snake position
         int newHeadX = snake.get(0)[0] + directionX;
         int newHeadY = snake.get(0)[1] + directionY;
 
@@ -185,12 +202,42 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    // Set snake direction based on user input
+    // Set snake direction based on user input (buttons or swipe)
     public void setDirection(int dx, int dy) {
         if ((dx != 0 && directionX == 0) || (dy != 0 && directionY == 0)) {
             directionX = dx;
             directionY = dy;
         }
+    }
+
+    // Handle touch events for swipe control
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float startX = 0, startY = 0;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startX = event.getX();
+                startY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                float endX = event.getX();
+                float endY = event.getY();
+                float deltaX = endX - startX;
+                float deltaY = endY - startY;
+
+                // Determine direction based on swipe
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe
+                    if (deltaX > 50) setDirection(1, 0); // Swipe right
+                    else if (deltaX < -50) setDirection(-1, 0); // Swipe left
+                } else {
+                    // Vertical swipe
+                    if (deltaY > 50) setDirection(0, 1); // Swipe down
+                    else if (deltaY < -50) setDirection(0, -1); // Swipe up
+                }
+                break;
+        }
+        return true; // Indicate that the touch event is handled
     }
 
     // Resume the game
