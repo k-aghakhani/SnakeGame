@@ -43,6 +43,7 @@
                 android:background="@drawable/button_background"
                 android:src="@drawable/ic_arrow_left"
                 android:scaleType="fitCenter"
+                android:layout_marginRight="50dp"
                 android:tint="@android:color/white"
                 android:contentDescription="Left" />
 
