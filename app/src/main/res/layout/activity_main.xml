@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -27,8 +28,8 @@
             android:background="@drawable/button_background"
             android:src="@drawable/ic_arrow_up"
             android:scaleType="fitCenter"
-            android:tint="@android:color/white"
-            android:contentDescription="Up" />
+            android:contentDescription="Up"
+            app:tint="@android:color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -44,8 +45,8 @@
                 android:src="@drawable/ic_arrow_left"
                 android:scaleType="fitCenter"
                 android:layout_marginRight="50dp"
-                android:tint="@android:color/white"
-                android:contentDescription="Left" />
+                android:contentDescription="Left"
+                app:tint="@android:color/white" />
 
             <View
                 android:layout_width="20dp"
@@ -59,8 +60,8 @@
                 android:src="@drawable/ic_arrow_right"
                 android:scaleType="fitCenter"
                 android:layout_marginLeft="10dp"
-                android:tint="@android:color/white"
-                android:contentDescription="Right" />
+                android:contentDescription="Right"
+                app:tint="@android:color/white" />
         </LinearLayout>
 
         <ImageButton
@@ -70,7 +71,7 @@
             android:background="@drawable/button_background"
             android:src="@drawable/ic_arrow_down"
             android:scaleType="fitCenter"
-            android:tint="@android:color/white"
-            android:contentDescription="Down" />
+            android:contentDescription="Down"
+            app:tint="@android:color/white" />
     </LinearLayout>
 </LinearLayout>
